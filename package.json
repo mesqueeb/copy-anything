@@ -19,7 +19,12 @@
     "clone",
     "json-stringify",
     "stringify-parse",
-    "object"
+    "object",
+    "copy-objects",
+    "clone-objects",
+    "json-stringify-json-parse",
+    "deep-clone",
+    "deep-copy"
   ],
   "author": "Luca Ban - Mesqueeb",
   "license": "MIT",
