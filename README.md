@@ -1,5 +1,9 @@
 # Copy anything 🎭
 
+```
+npm i copy-anything
+```
+
 An optimised way to copy'ing (cloning) an object or array. A small and simple integration.
 
 ## Motivation
