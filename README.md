@@ -1,15 +1,17 @@
 # Copy anything 🎭
 
-An optimised way to copy'ing an object. A small and simple integration.
+An optimised way to copy'ing (cloning) an object or array. A small and simple integration.
 
 ## Motivation
 
-I created this package because I tried a lot of similar packages that do copy'ing/cloning of objects. But all had its quirks, and *all of them break things they are not supposed to break*... 😞
+I created this package because I tried a lot of similar packages that do copy'ing/cloning. But all had its quirks, and *all of them break things they are not supposed to break*... 😞
 
 I was looking for:
 
-- a simple copy function like `JSON.parse(JSON.stringify(object))`
+- a simple copy/clone function
+- has to be fast!
 - props must lose any reference to original object
+- works with arrays and objects in arrays!
 - **does not break special class instances**　‼️
 
 This last one is crucial! So many libraries use custom classes that create objects with special prototypes, and such objects all break when trying to copy them inproperly. So we gotta be careful!
@@ -31,33 +33,46 @@ copy-anything will copy objects and nested properties, but only as long as they'
 ```js
 import copy from 'copy-anything'
 
-const target = {name: 'Ditto', type: {water: true}}
-const copy = copy(target)
+const original = {name: 'Ditto', type: {water: true}}
+const copy = copy(original)
 
 // now if we change a nested prop like the type:
 copy.type.water = false
-copy.type.fire = true
+copy.type.fire = true // new prop
 
 // then the original object will still be the same:
-// target.type.water === true
-// target.type.fire === undefined
+(original.type.water === true)
+(original.type.fire === undefined)
+```
+
+## Works with arrays
+
+It will also clone arrays, **as well as objects inside arrays!** 😉
+
+```js
+import copy from 'copy-anything'
+
+const original = [{name: 'Squirtle'}]
+const copy = copy(original)
+
+// now if we change a prop in the array like so:
+copy[0].name = 'Wartortle'
+copy.push({name: 'Charmander'}) // new item
+
+// then the original array will still be the same:
+(original[0].name === 'Squirtle')
+(original[1] === undefined)
 ```
 
 ## Source code
 
 The source code is literally just these lines. Most of the magic comes from the isPlainObject function from the [is-what library](https://github.com/mesqueeb/is-what).
 
-```TypeScript
+```JavaScript
 import { isPlainObject } from 'is-what'
 
-/**
- * Copy (clone) an object and all its props recursively to get rid of any prop referenced of the original object.
- *
- * @export
- * @param {*} target Target can be anything
- * @returns {*} the target with replaced values
- */
-export default function copy (target: any): any {
+export default function copy (target) {
+  if (isArray(target)) return target.map(i => copy(i))
   if (!isPlainObject(target)) return target
   return Object.keys(target)
     .reduce((carry, key) => {

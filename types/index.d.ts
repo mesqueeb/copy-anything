@@ -1,5 +1,5 @@
 /**
- * Copy (clone) an object and all its props recursively to get rid of any prop referenced of the original object.
+ * Copy (clone) an object and all its props recursively to get rid of any prop referenced of the original object. Arrays are also cloned, however objects inside arrays are still linked.
  *
  * @export
  * @param {*} target Target can be anything
