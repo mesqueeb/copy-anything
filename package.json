@@ -1,6 +1,6 @@
 {
   "name": "copy-anything",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "An optimised way to copy'ing an object. A small and simple integration",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
@@ -33,9 +33,9 @@
   },
   "homepage": "https://github.com/mesqueeb/copy-anything#readme",
   "devDependencies": {
-    "ava": "^1.0.1",
-    "rollup-plugin-typescript2": "^0.19.2",
-    "typescript": "^3.2.2"
+    "ava": "^1.4.1",
+    "rollup-plugin-typescript2": "^0.21.0",
+    "typescript": "^3.4.5"
   },
   "dependencies": {
     "is-what": "^3.1.2"
