@@ -16,6 +16,8 @@ I was looking for:
 - has to be fast!
 - props must lose any reference to original object
 - works with arrays and objects in arrays!
+- supports symbols
+- supports enumerable & nonenumerable props
 - **does not break special class instances**　‼️
 
 This last one is crucial! So many libraries use custom classes that create objects with special prototypes, and such objects all break when trying to copy them inproperly. So we gotta be careful!

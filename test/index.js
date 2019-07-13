@@ -112,3 +112,49 @@ test('special objects', t => {
   res = copy(target)
   t.deepEqual(res, target)
 })
+
+test('symbols as keys', t => {
+  let res, target
+  const mySymbol = Symbol('mySymbol')
+  target = { value: 42, [mySymbol]: 'hello' }
+  res = copy(target)
+  // change original
+  target.value = 1
+  target[mySymbol] = 2
+  t.is(res.value, 42)
+  t.is(res[mySymbol], 'hello')
+  t.is(target.value, 1)
+  t.is(target[mySymbol], 2)
+})
+
+test('nonenumerable keys', t => {
+  let target, res
+  const mySymbol = Symbol('mySymbol')
+  target = { value: 42 }
+  Object.defineProperty(target, 'id', {
+    value: 1,
+    writable: true,
+    enumerable: false,
+    configurable: true
+  })
+  Object.defineProperty(target, mySymbol, {
+    value: 'original',
+    writable: true,
+    enumerable: false,
+    configurable: true
+  })
+  res = copy(target)
+  // change original
+  target.id = 100
+  target[mySymbol] = 'new'
+  target.value = 300
+  t.is(res.value, 42)
+  t.is(res.id, 1)
+  t.is(res[mySymbol], 'original')
+  t.is(Object.keys(res).length, 1)
+  t.true(Object.keys(res).includes('value'))
+  t.is(target.id, 100)
+  t.is(target[mySymbol], 'new')
+  t.is(target.value, 300)
+  t.is(Object.keys(target).length, 1)
+})
