@@ -2,13 +2,13 @@
 
 var isWhat = require('is-what');
 
-function assignProp(carry, key, newVal, originalObject) {
+function assignProp(carry, key, newVal, originalObject, nonenumerable) {
     var propType = originalObject.propertyIsEnumerable(key)
         ? 'enumerable'
         : 'nonenumerable';
     if (propType === 'enumerable')
         carry[key] = newVal;
-    if (propType === 'nonenumerable') {
+    if (nonenumerable && propType === 'nonenumerable') {
         Object.defineProperty(carry, key, {
             value: newVal,
             enumerable: false,
@@ -22,20 +22,25 @@ function assignProp(carry, key, newVal, originalObject) {
  *
  * @export
  * @param {*} target Target can be anything
+ * @param {*} options Options can be `props` or `nonenumerable`.
  * @returns {*} the target with replaced values
  */
-function copy(target) {
+function copy(target, options) {
+    if (options === void 0) { options = { props: null, nonenumerable: false }; }
     if (isWhat.isArray(target))
-        return target.map(function (i) { return copy(i); });
+        return target.map(function (i) { return copy(i, options); });
     if (!isWhat.isPlainObject(target))
         return target;
     var props = Object.getOwnPropertyNames(target);
     var symbols = Object.getOwnPropertySymbols(target);
     return props.concat(symbols).reduce(function (carry, key) {
+        if (isWhat.isArray(options.props) && !options.props.includes(key)) {
+            return carry;
+        }
         // @ts-ignore
         var val = target[key];
-        var newVal = copy(val);
-        assignProp(carry, key, newVal, target);
+        var newVal = copy(val, options);
+        assignProp(carry, key, newVal, target, options.nonenumerable);
         return carry;
     }, {});
 }

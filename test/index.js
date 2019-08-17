@@ -127,7 +127,39 @@ test('symbols as keys', t => {
   t.is(target[mySymbol], 2)
 })
 
-test('nonenumerable keys', t => {
+test('nonenumerable keys - turned on', t => {
+  let target, res
+  const mySymbol = Symbol('mySymbol')
+  target = { value: 42 }
+  Object.defineProperty(target, 'id', {
+    value: 1,
+    writable: true,
+    enumerable: false,
+    configurable: true
+  })
+  Object.defineProperty(target, mySymbol, {
+    value: 'original',
+    writable: true,
+    enumerable: false,
+    configurable: true
+  })
+  res = copy(target, {nonenumerable: true})
+  // change original
+  target.id = 100
+  target[mySymbol] = 'new'
+  target.value = 300
+  t.is(res.value, 42)
+  t.is(res.id, 1)
+  t.is(res[mySymbol], 'original')
+  t.is(Object.keys(res).length, 1)
+  t.true(Object.keys(res).includes('value'))
+  t.is(target.id, 100)
+  t.is(target[mySymbol], 'new')
+  t.is(target.value, 300)
+  t.is(Object.keys(target).length, 1)
+})
+
+test('nonenumerable keys - turned off', t => {
   let target, res
   const mySymbol = Symbol('mySymbol')
   target = { value: 42 }
@@ -145,16 +177,61 @@ test('nonenumerable keys', t => {
   })
   res = copy(target)
   // change original
-  target.id = 100
-  target[mySymbol] = 'new'
-  target.value = 300
+  t.is(res.value, 42)
+  t.is(res.id, undefined)
+  t.is(res[mySymbol], undefined)
+})
+
+test('specific props', t => {
+  let target, res
+  const mySymbol = Symbol('mySymbol')
+  const mySymbol2 = Symbol('mySymbol')
+  target = { value: 42, value2: 24 }
+  Object.defineProperty(target, 'id', {
+    value: 1,
+    writable: true,
+    enumerable: false,
+    configurable: true
+  })
+  Object.defineProperty(target, mySymbol, {
+    value: 'original',
+    writable: true,
+    enumerable: false,
+    configurable: true
+  })
+  Object.defineProperty(target, 'id2', {
+    value: 2,
+    writable: true,
+    enumerable: false,
+    configurable: true
+  })
+  Object.defineProperty(target, mySymbol2, {
+    value: 'original2',
+    writable: true,
+    enumerable: false,
+    configurable: true
+  })
+  // only enumerable
+  res = copy(target, {props: [mySymbol, 'value', 'id']})
+  t.is(res.value, 42)
+  t.is(res.id, undefined)
+  t.is(res[mySymbol], undefined)
+  t.is(res.value2, undefined)
+  t.is(res.id2, undefined)
+  t.is(res[mySymbol2], undefined)
+  t.is(Object.keys(res).length, 1)
+  t.true(Object.keys(res).includes('value'))
+  t.is(Object.keys(target).length, 2)
+
+  // non-enumerable included
+  res = copy(target, {props: [mySymbol, 'value', 'id'], nonenumerable: true})
   t.is(res.value, 42)
   t.is(res.id, 1)
   t.is(res[mySymbol], 'original')
+  t.is(res.value2, undefined)
+  t.is(res.id2, undefined)
+  t.is(res[mySymbol2], undefined)
   t.is(Object.keys(res).length, 1)
   t.true(Object.keys(res).includes('value'))
-  t.is(target.id, 100)
-  t.is(target[mySymbol], 'new')
-  t.is(target.value, 300)
-  t.is(Object.keys(target).length, 1)
+  t.is(Object.keys(target).length, 2)
 })
