@@ -17,7 +17,7 @@ I was looking for:
 - props must lose any reference to original object
 - works with arrays and objects in arrays!
 - supports symbols
-- supports enumerable & nonenumerable props
+- can copy non-enumerable props as well
 - **does not break special class instances**　‼️
 
 This last one is crucial! So many libraries use custom classes that create objects with special prototypes, and such objects all break when trying to copy them inproperly. So we gotta be careful!
@@ -51,13 +51,13 @@ copy.type.fire = true // new prop
 (original.type.fire === undefined)
 ```
 
+> Please note, by default copy-anything does not copy non-enumerable props. If you need to copy those, see the instructions further down below.
+
 ## Works with arrays
 
 It will also clone arrays, **as well as objects inside arrays!** 😉
 
 ```js
-import copy from 'copy-anything'
-
 const original = [{name: 'Squirtle'}]
 const copy = copy(original)
 
@@ -69,6 +69,39 @@ copy.push({name: 'Charmander'}) // new item
 (original[0].name === 'Squirtle')
 (original[1] === undefined)
 ```
+
+## Non-enumerable
+
+By default, copy-anything only copies enumerable properties. If you also want to copy non-enumerable properties you can do so by passing that as an option.
+
+```js
+const original = {name: 'Bulbasaur'}
+// bulbasaur's ID is non-enumerable
+Object.defineProperty(original, 'id', {
+  value: '001',
+  writable: true,
+  enumerable: false,
+  configurable: true
+})
+const copy1 = copy(original)
+const copy2 = copy(original, {nonenumerable: true})
+
+(copy1.id === undefined)
+(copy2.id === '001')
+```
+
+## Limit to specific props
+
+You can limit to specific props.
+
+```js
+const original = {name: 'Flareon', type: ['fire'], id: '136'}
+const copy = copy(original, {props: ['name']})
+
+(copy === {name: 'Flareon'})
+```
+
+> Please note, if the props you have specified are non-enumerable, you will also need to pass `{nonenumerable: true}`.
 
 ## Source code
 
