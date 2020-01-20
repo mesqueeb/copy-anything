@@ -1,6 +1,7 @@
 {
   "name": "copy-anything",
-  "version": "1.5.2",
+  "sideEffects": false,
+  "version": "1.5.3",
   "description": "An optimised way to copy'ing an object. A small and simple integration",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
