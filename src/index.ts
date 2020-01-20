@@ -1,7 +1,7 @@
 import { isPlainObject, isArray } from 'is-what'
 
-function assignProp (carry, key, newVal, originalObject, nonenumerable) {
-  const propType = originalObject.propertyIsEnumerable(key)
+function assignProp (carry, key, newVal, originalObject, nonenumerable): void {
+  const propType = {}.propertyIsEnumerable.call(originalObject, key)
     ? 'enumerable'
     : 'nonenumerable'
   if (propType === 'enumerable') carry[key] = newVal
@@ -10,12 +10,12 @@ function assignProp (carry, key, newVal, originalObject, nonenumerable) {
       value: newVal,
       enumerable: false,
       writable: true,
-      configurable: true
+      configurable: true,
     })
   }
 }
 
-export type Options = {props: any[], nonenumerable: boolean}
+export type Options = { props: any[]; nonenumerable: boolean }
 
 /**
  * Copy (clone) an object and all its props recursively to get rid of any prop referenced of the original object. Arrays are also cloned, however objects inside arrays are still linked.
@@ -27,21 +27,20 @@ export type Options = {props: any[], nonenumerable: boolean}
  */
 export default function copy (
   target: any,
-  options: Options = {props: null, nonenumerable: false}
+  options: Options = { props: null, nonenumerable: false }
 ): any {
   if (isArray(target)) return target.map(i => copy(i, options))
   if (!isPlainObject(target)) return target
   const props = Object.getOwnPropertyNames(target)
   const symbols = Object.getOwnPropertySymbols(target)
-  return [...props, ...symbols]
-    .reduce((carry, key) => {
-      if (isArray(options.props) && !options.props.includes(key)) {
-        return carry
-      }
-      // @ts-ignore
-      const val = target[key]
-      const newVal = copy(val, options)
-      assignProp(carry, key, newVal, target, options.nonenumerable)
+  return [...props, ...symbols].reduce((carry, key) => {
+    if (isArray(options.props) && !options.props.includes(key)) {
       return carry
-    }, {})
+    }
+    // @ts-ignore
+    const val = target[key]
+    const newVal = copy(val, options)
+    assignProp(carry, key, newVal, target, options.nonenumerable)
+    return carry
+  }, {})
 }

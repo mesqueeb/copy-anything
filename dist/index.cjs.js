@@ -26,7 +26,7 @@ function __spreadArrays() {
 }
 
 function assignProp(carry, key, newVal, originalObject, nonenumerable) {
-    var propType = originalObject.propertyIsEnumerable(key)
+    var propType = {}.propertyIsEnumerable.call(originalObject, key)
         ? 'enumerable'
         : 'nonenumerable';
     if (propType === 'enumerable')
@@ -36,7 +36,7 @@ function assignProp(carry, key, newVal, originalObject, nonenumerable) {
             value: newVal,
             enumerable: false,
             writable: true,
-            configurable: true
+            configurable: true,
         });
     }
 }
