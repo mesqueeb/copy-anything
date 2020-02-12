@@ -1,13 +1,15 @@
 export declare type Options = {
-    props: any[];
-    nonenumerable: boolean;
+    props?: (string | symbol)[];
+    nonenumerable?: boolean;
 };
 /**
  * Copy (clone) an object and all its props recursively to get rid of any prop referenced of the original object. Arrays are also cloned, however objects inside arrays are still linked.
  *
  * @export
- * @param {*} target Target can be anything
- * @param {*} options Options can be `props` or `nonenumerable`.
- * @returns {*} the target with replaced values
+ * @template T
+ * @param {T} target Target can be anything
+ * @param {Options} [options={}] Options can be `props` or `nonenumerable`
+ * @returns {T} the target with replaced values
+ * @export
  */
-export default function copy(target: any, options?: Options): any;
+export default function copy<T extends any>(target: T, options?: Options): T;

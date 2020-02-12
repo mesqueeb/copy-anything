@@ -25,13 +25,13 @@ function __spreadArrays() {
     return r;
 }
 
-function assignProp(carry, key, newVal, originalObject, nonenumerable) {
+function assignProp(carry, key, newVal, originalObject, includeNonenumerable) {
     var propType = {}.propertyIsEnumerable.call(originalObject, key)
         ? 'enumerable'
         : 'nonenumerable';
     if (propType === 'enumerable')
         carry[key] = newVal;
-    if (nonenumerable && propType === 'nonenumerable') {
+    if (includeNonenumerable && propType === 'nonenumerable') {
         Object.defineProperty(carry, key, {
             value: newVal,
             enumerable: false,
@@ -44,12 +44,14 @@ function assignProp(carry, key, newVal, originalObject, nonenumerable) {
  * Copy (clone) an object and all its props recursively to get rid of any prop referenced of the original object. Arrays are also cloned, however objects inside arrays are still linked.
  *
  * @export
- * @param {*} target Target can be anything
- * @param {*} options Options can be `props` or `nonenumerable`.
- * @returns {*} the target with replaced values
+ * @template T
+ * @param {T} target Target can be anything
+ * @param {Options} [options={}] Options can be `props` or `nonenumerable`
+ * @returns {T} the target with replaced values
+ * @export
  */
 function copy(target, options) {
-    if (options === void 0) { options = { props: null, nonenumerable: false }; }
+    if (options === void 0) { options = {}; }
     if (isWhat.isArray(target))
         return target.map(function (i) { return copy(i, options); });
     if (!isWhat.isPlainObject(target))
@@ -60,7 +62,6 @@ function copy(target, options) {
         if (isWhat.isArray(options.props) && !options.props.includes(key)) {
             return carry;
         }
-        // @ts-ignore
         var val = target[key];
         var newVal = copy(val, options);
         assignProp(carry, key, newVal, target, options.nonenumerable);
