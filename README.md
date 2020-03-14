@@ -8,7 +8,7 @@ An optimised way to copy'ing (cloning) an object or array. A small and simple in
 
 ## Motivation
 
-I created this package because I tried a lot of similar packages that do copy'ing/cloning. But all had its quirks, and *all of them break things they are not supposed to break*... 😞
+I created this package because I tried a lot of similar packages that do copy'ing/cloning. But all had its quirks, and _all of them break things they are not supposed to break_... 😞
 
 I was looking for:
 
@@ -37,18 +37,19 @@ copy-anything will copy objects and nested properties, but only as long as they'
 ## Usage
 
 ```js
-import copy from 'copy-anything'
+import { copy } from 'copy-anything'
 
-const original = {name: 'Ditto', type: {water: true}}
+const original = { name: 'Ditto', type: { water: true } }
 const copy = copy(original)
 
 // now if we change a nested prop like the type:
 copy.type.water = false
-copy.type.fire = true // new prop
+copy.type.fire = true(
+  // new prop
 
-// then the original object will still be the same:
-(original.type.water === true)
-(original.type.fire === undefined)
+  // then the original object will still be the same:
+  original.type.water === true
+)(original.type.fire === undefined)
 ```
 
 > Please note, by default copy-anything does not copy non-enumerable props. If you need to copy those, see the instructions further down below.
@@ -58,16 +59,17 @@ copy.type.fire = true // new prop
 It will also clone arrays, **as well as objects inside arrays!** 😉
 
 ```js
-const original = [{name: 'Squirtle'}]
+const original = [{ name: 'Squirtle' }]
 const copy = copy(original)
 
 // now if we change a prop in the array like so:
 copy[0].name = 'Wartortle'
-copy.push({name: 'Charmander'}) // new item
+copy.push({ name: 'Charmander' })(
+  // new item
 
-// then the original array will still be the same:
-(original[0].name === 'Squirtle')
-(original[1] === undefined)
+  // then the original array will still be the same:
+  original[0].name === 'Squirtle'
+)(original[1] === undefined)
 ```
 
 ## Non-enumerable
@@ -75,19 +77,16 @@ copy.push({name: 'Charmander'}) // new item
 By default, copy-anything only copies enumerable properties. If you also want to copy non-enumerable properties you can do so by passing that as an option.
 
 ```js
-const original = {name: 'Bulbasaur'}
+const original = { name: 'Bulbasaur' }
 // bulbasaur's ID is non-enumerable
 Object.defineProperty(original, 'id', {
   value: '001',
   writable: true,
   enumerable: false,
-  configurable: true
+  configurable: true,
 })
 const copy1 = copy(original)
-const copy2 = copy(original, {nonenumerable: true})
-
-(copy1.id === undefined)
-(copy2.id === '001')
+const copy2 = copy(original, { nonenumerable: true })(copy1.id === undefined)(copy2.id === '001')
 ```
 
 ## Limit to specific props
@@ -95,10 +94,8 @@ const copy2 = copy(original, {nonenumerable: true})
 You can limit to specific props.
 
 ```js
-const original = {name: 'Flareon', type: ['fire'], id: '136'}
-const copy = copy(original, {props: ['name']})
-
-(copy === {name: 'Flareon'})
+const original = { name: 'Flareon', type: ['fire'], id: '136' }
+const copy = copy(original, { props: ['name'] })(copy === { name: 'Flareon' })
 ```
 
 > Please note, if the props you have specified are non-enumerable, you will also need to pass `{nonenumerable: true}`.
@@ -110,7 +107,7 @@ The source code is literally just these lines. Most of the magic comes from the 
 ```JavaScript
 import { isPlainObject } from 'is-what'
 
-export default function copy (target) {
+export function copy (target) {
   if (isArray(target)) return target.map(i => copy(i))
   if (!isPlainObject(target)) return target
   return Object.keys(target)

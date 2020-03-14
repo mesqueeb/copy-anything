@@ -1,5 +1,7 @@
 'use strict';
 
+Object.defineProperty(exports, '__esModule', { value: true });
+
 var isWhat = require('is-what');
 
 /*! *****************************************************************************
@@ -69,4 +71,4 @@ function copy(target, options) {
     }, {});
 }
 
-module.exports = copy;
+exports.copy = copy;

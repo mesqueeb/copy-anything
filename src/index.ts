@@ -36,7 +36,7 @@ export type Options = { props?: (string | symbol)[]; nonenumerable?: boolean }
  * @returns {T} the target with replaced values
  * @export
  */
-export default function copy<T extends any> (target: T, options: Options = {}): T {
+export function copy<T extends any> (target: T, options: Options = {}): T {
   if (isArray(target)) return target.map((i: any) => copy(i, options))
   if (!isPlainObject(target)) return target
   const props = Object.getOwnPropertyNames(target)

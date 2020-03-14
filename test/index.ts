@@ -1,5 +1,5 @@
 import test from 'ava'
-import copy from '../src/index'
+import { copy } from '../src/index'
 
 test('copy - change original', t => {
   const original = { a: 0, b: 0, c: { d: 0 } }

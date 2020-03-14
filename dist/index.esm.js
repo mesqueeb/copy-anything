@@ -67,4 +67,4 @@ function copy(target, options) {
     }, {});
 }
 
-export default copy;
+export { copy };

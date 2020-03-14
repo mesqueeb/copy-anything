@@ -1,7 +1,7 @@
 {
   "name": "copy-anything",
   "sideEffects": false,
-  "version": "1.6.0",
+  "version": "2.0.0",
   "description": "An optimised way to copy'ing an object. A small and simple integration",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
@@ -26,7 +26,9 @@
     "clone-objects",
     "json-stringify-json-parse",
     "deep-clone",
-    "deep-copy"
+    "deep-copy",
+    "typescript",
+    "ts"
   ],
   "author": "Luca Ban - Mesqueeb",
   "license": "MIT",
@@ -50,11 +52,7 @@
     "typescript": "^3.7.5"
   },
   "ava": {
-    "extensions": [
-      "ts"
-    ],
-    "require": [
-      "ts-node/register"
-    ]
+    "extensions": ["ts"],
+    "require": ["ts-node/register"]
   }
 }
