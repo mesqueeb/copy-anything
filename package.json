@@ -12,9 +12,20 @@
     "rollup": "rollup -c build/rollup.js",
     "build": "npm run lint && npm run test && npm run rollup"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mesqueeb/copy-anything.git"
+  "dependencies": {
+    "is-what": "^3.7.1"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.23.0",
+    "@typescript-eslint/parser": "^2.23.0",
+    "ava": "^3.5.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-tree-shaking": "^1.8.0",
+    "rollup": "^1.32.1",
+    "rollup-plugin-typescript2": "^0.25.3",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.8.3"
   },
   "keywords": [
     "copy",
@@ -36,20 +47,9 @@
     "url": "https://github.com/mesqueeb/copy-anything/issues"
   },
   "homepage": "https://github.com/mesqueeb/copy-anything#readme",
-  "dependencies": {
-    "is-what": "^3.6.0"
-  },
-  "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^2.19.2",
-    "@typescript-eslint/parser": "^2.19.2",
-    "ava": "^3.3.0",
-    "eslint": "^6.8.0",
-    "eslint-config-prettier": "^6.10.0",
-    "eslint-plugin-tree-shaking": "^1.8.0",
-    "rollup": "^1.31.0",
-    "rollup-plugin-typescript2": "^0.25.3",
-    "ts-node": "^8.6.2",
-    "typescript": "^3.7.5"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mesqueeb/copy-anything.git"
   },
   "ava": {
     "extensions": ["ts"],
