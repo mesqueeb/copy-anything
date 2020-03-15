@@ -1,7 +1,7 @@
 {
   "name": "copy-anything",
   "sideEffects": false,
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "An optimised way to copy'ing an object. A small and simple integration",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
@@ -52,7 +52,11 @@
     "url": "git+https://github.com/mesqueeb/copy-anything.git"
   },
   "ava": {
-    "extensions": ["ts"],
-    "require": ["ts-node/register"]
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ]
   }
 }
