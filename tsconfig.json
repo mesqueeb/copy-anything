@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "outDir": "./dist",
     "declaration": true,
     "declarationDir": "./types/",
@@ -7,6 +8,7 @@
     "lib": ["es5", "es2015", "es2016", "es2017", "dom"]
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "test/**/*"
   ]
 }

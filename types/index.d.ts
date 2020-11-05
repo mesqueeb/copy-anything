@@ -8,7 +8,7 @@ export declare type Options = {
  * @export
  * @template T
  * @param {T} target Target can be anything
- * @param {Options} [options={}] Options can be `props` or `nonenumerable`
+ * @param {Options} [options = {}] Options can be `props` or `nonenumerable`
  * @returns {T} the target with replaced values
  * @export
  */

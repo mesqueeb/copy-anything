@@ -1,7 +1,7 @@
 {
   "name": "copy-anything",
   "sideEffects": false,
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "An optimised way to copy'ing an object. A small and simple integration",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
@@ -13,19 +13,20 @@
     "build": "npm run lint && npm run test && npm run rollup"
   },
   "dependencies": {
-    "is-what": "^3.7.1"
+    "is-what": "^3.11.3"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^2.23.0",
-    "@typescript-eslint/parser": "^2.23.0",
-    "ava": "^3.5.0",
-    "eslint": "^6.8.0",
-    "eslint-config-prettier": "^6.10.0",
+    "@typescript-eslint/eslint-plugin": "^4.6.1",
+    "@typescript-eslint/parser": "^4.6.1",
+    "ava": "^3.13.0",
+    "eslint": "^7.12.1",
+    "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-tree-shaking": "^1.8.0",
-    "rollup": "^1.32.1",
-    "rollup-plugin-typescript2": "^0.25.3",
-    "ts-node": "^8.6.2",
-    "typescript": "^3.8.3"
+    "rollup": "^2.33.1",
+    "rollup-plugin-typescript2": "^0.29.0",
+    "tsconfig-paths": "^3.9.0",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.5"
   },
   "keywords": [
     "copy",
@@ -56,6 +57,7 @@
       "ts"
     ],
     "require": [
+      "tsconfig-paths/register",
       "ts-node/register"
     ]
   }

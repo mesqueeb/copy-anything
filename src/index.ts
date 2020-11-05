@@ -1,7 +1,6 @@
 import { isPlainObject, isArray } from 'is-what'
 
-// @ts-ignore
-type PlainObject = { [key: string | symbol]: any }
+type PlainObject = { [key in string | symbol]: any }
 
 function assignProp (
   carry: PlainObject,
@@ -13,7 +12,7 @@ function assignProp (
   const propType = {}.propertyIsEnumerable.call(originalObject, key)
     ? 'enumerable'
     : 'nonenumerable'
-  if (propType === 'enumerable') carry[key] = newVal
+  if (propType === 'enumerable') carry[key as any] = newVal
   if (includeNonenumerable && propType === 'nonenumerable') {
     Object.defineProperty(carry, key, {
       value: newVal,
@@ -32,12 +31,12 @@ export type Options = { props?: (string | symbol)[]; nonenumerable?: boolean }
  * @export
  * @template T
  * @param {T} target Target can be anything
- * @param {Options} [options={}] Options can be `props` or `nonenumerable`
+ * @param {Options} [options = {}] Options can be `props` or `nonenumerable`
  * @returns {T} the target with replaced values
  * @export
  */
 export function copy<T extends any> (target: T, options: Options = {}): T {
-  if (isArray(target)) return target.map((i: any) => copy(i, options))
+  if (isArray(target)) return target.map((item) => copy(item, options)) as T
   if (!isPlainObject(target)) return target
   const props = Object.getOwnPropertyNames(target)
   const symbols = Object.getOwnPropertySymbols(target)
