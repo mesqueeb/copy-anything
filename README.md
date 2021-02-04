@@ -92,7 +92,6 @@ const copy1 = copy(original)
 const copy2 = copy(original, { nonenumerable: true })
 (copy2.id === '001') // true
 ```
-<!-- prettier-ignore-end -->
 
 ## Limit to specific props
 
@@ -100,11 +99,14 @@ You can limit to specific props.
 
 ```js
 const original = { name: 'Flareon', type: ['fire'], id: '136' }
-const copy = copy(original, { props: ['name'] })(copy === { name: 'Flareon' })
+const copy = copy(original, { props: ['name'] })
+
+(copy === { name: 'Flareon' }) // true
 ```
 
 > Please note, if the props you have specified are non-enumerable, you will also need to pass `{nonenumerable: true}`.
 
+<!-- prettier-ignore-end -->
 ## Source code
 
 The source code is literally just these lines. Most of the magic comes from the isPlainObject function from the [is-what library](https://github.com/mesqueeb/is-what).
