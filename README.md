@@ -36,20 +36,21 @@ copy-anything will copy objects and nested properties, but only as long as they'
 
 ## Usage
 
+<!-- prettier-ignore-start -->
 ```js
 import { copy } from 'copy-anything'
 
 const original = { name: 'Ditto', type: { water: true } }
 const copy = copy(original)
 
-// now if we change a nested prop like the type:
+// now if we change a nested prop like the type
 copy.type.water = false
-copy.type.fire = true(
-  // new prop
+// or add a new nested prop
+copy.type.fire = true
 
-  // then the original object will still be the same:
-  original.type.water === true
-)(original.type.fire === undefined)
+// then the original object will still be the same:
+(original.type.water === true) // true
+(original.type.fire === undefined) // true
 ```
 
 > Please note, by default copy-anything does not copy non-enumerable props. If you need to copy those, see the instructions further down below.
@@ -62,14 +63,14 @@ It will also clone arrays, **as well as objects inside arrays!** 😉
 const original = [{ name: 'Squirtle' }]
 const copy = copy(original)
 
-// now if we change a prop in the array like so:
+// now if we change a prop in the array
 copy[0].name = 'Wartortle'
-copy.push({ name: 'Charmander' })(
-  // new item
+// or add a new item to the array
+copy.push({ name: 'Charmander' })
 
-  // then the original array will still be the same:
-  original[0].name === 'Squirtle'
-)(original[1] === undefined)
+// then the original array will still be the same:
+(original[0].name === 'Squirtle') // true
+(original[1] === undefined) // true
 ```
 
 ## Non-enumerable
@@ -86,8 +87,12 @@ Object.defineProperty(original, 'id', {
   configurable: true,
 })
 const copy1 = copy(original)
-const copy2 = copy(original, { nonenumerable: true })(copy1.id === undefined)(copy2.id === '001')
+(copy1.id === undefined) // true
+
+const copy2 = copy(original, { nonenumerable: true })
+(copy2.id === '001') // true
 ```
+<!-- prettier-ignore-end -->
 
 ## Limit to specific props
 
