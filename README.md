@@ -101,7 +101,7 @@ You can limit to specific props.
 const original = { name: 'Flareon', type: ['fire'], id: '136' }
 const copy = copy(original, { props: ['name'] })
 
-(copy === { name: 'Flareon' }) // true
+(copy) // will look like: `{ name: 'Flareon' }`
 ```
 
 > Please note, if the props you have specified are non-enumerable, you will also need to pass `{nonenumerable: true}`.
