@@ -1,5 +1,8 @@
 # Copy anything 🎭
 
+<a href="https://www.npmjs.com/package/copy-anything"><img src="https://img.shields.io/npm/v/copy-anything.svg" alt="Total Downloads"></a>
+<a href="https://www.npmjs.com/package/copy-anything"><img src="https://img.shields.io/npm/dw/copy-anything.svg" alt="Latest Stable Version"></a>
+
 ```
 npm i copy-anything
 ```
