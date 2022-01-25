@@ -1,43 +1,43 @@
-import test from 'ava'
+import { test, expect } from 'vitest'
 import { copy } from '../src/index'
 
-test('copy - change original', t => {
+test('copy - change original', () => {
   const original = { a: 0, b: 0, c: { d: 0 } }
   const copied = copy(original)
   t.deepEqual(copied, original)
   // change original
   original.a = 1
-  t.is(original.a, 1)
-  t.is(copied.a, 0)
+  expect(original.a).toEqual(1)
+  expect(copied.a).toEqual(0)
   original.c.d = 1
-  t.is(original.c.d, 1)
-  t.is(copied.c.d, 0)
+  expect(original.c.d).toEqual(1)
+  expect(copied.c.d).toEqual(0)
   // @ts-ignore
   original.c.e = 'new'
   // @ts-ignore
-  t.is(original.c.e, 'new')
+  expect(original.c.e).toEqual('new')
   // @ts-ignore
-  t.is(copied.c.e, undefined)
+  expect(copied.c.e).toEqual(undefined)
 })
-test('copy - change copied', t => {
+test('copy - change copied', () => {
   const original = { a: false, b: '', c: { d: false } }
   const copied = copy(original)
   // change copied
   copied.a = true
-  t.is(copied.a, true)
-  t.is(original.a, false)
+  expect(copied.a).toEqual(true)
+  expect(original.a).toEqual(false)
   copied.c.d = true
-  t.is(copied.c.d, true)
-  t.is(original.c.d, false)
+  expect(copied.c.d).toEqual(true)
+  expect(original.c.d).toEqual(false)
   // @ts-ignore
   copied.c.e = 'new'
   // @ts-ignore
-  t.is(copied.c.e, 'new')
+  expect(copied.c.e).toEqual('new')
   // @ts-ignore
-  t.is(original.c.e, undefined)
+  expect(original.c.e).toEqual(undefined)
 })
 
-test('Arrays in objects - change original', t => {
+test('Arrays in objects - change original', () => {
   const original = { a: [1, 2], c: { d: ['a'] } }
   const copied = copy(original)
   t.deepEqual(copied, original)
@@ -49,7 +49,7 @@ test('Arrays in objects - change original', t => {
   t.deepEqual(original.c.d, ['z', 'a'])
   t.deepEqual(copied.c.d, ['a'])
 })
-test('Arrays in objects - change copied', t => {
+test('Arrays in objects - change copied', () => {
   const original = { a: [1, 2], c: { d: ['a'] } }
   const copied = copy(original)
   t.deepEqual(copied, original)
@@ -62,7 +62,7 @@ test('Arrays in objects - change copied', t => {
   t.deepEqual(original.c.d, ['a'])
 })
 
-test('Arrays with objects in objects - change original', t => {
+test('Arrays with objects in objects - change original', () => {
   const original = { a: [{ a: 1 }], c: { d: [{ b: 1 }] } }
   const copied = copy(original)
   t.deepEqual(copied, original)
@@ -74,7 +74,7 @@ test('Arrays with objects in objects - change original', t => {
   t.deepEqual(original.c.d, [{ b: 2 }])
   t.deepEqual(copied.c.d, [{ b: 1 }])
 })
-test('Arrays with objects in objects - change copied', t => {
+test('Arrays with objects in objects - change copied', () => {
   const original = { a: [{ a: 1 }], c: { d: [{ b: 1 }] } }
   const copied = copy(original)
   t.deepEqual(copied, original)
@@ -87,7 +87,7 @@ test('Arrays with objects in objects - change copied', t => {
   t.deepEqual(original.c.d, [{ b: 1 }])
 })
 
-test('Arrays', t => {
+test('Arrays', () => {
   const original = [1, 2, 3, 4]
   const copied = copy(original)
   t.deepEqual(copied, original)
@@ -96,34 +96,34 @@ test('Arrays', t => {
   t.deepEqual(copied, [0, 1, 2, 3, 4])
 })
 
-test('non objects 1', t => {
+test('non objects 1', () => {
   const original = 'ha'
   const copied = copy(original)
-  t.is(copied, original)
+  expect(copied).toEqual(original)
 })
-test('non objects 2', t => {
+test('non objects 2', () => {
   const original = 1
   const copied = copy(original)
-  t.is(copied, original)
+  expect(copied).toEqual(original)
 })
-test('non objects 3', t => {
+test('non objects 3', () => {
   const original = undefined
   const copied = copy(original)
-  t.is(copied, original)
+  expect(copied).toEqual(original)
 })
 
-test('special objects 1', t => {
+test('special objects 1', () => {
   const original = new Date()
   const copied = copy(original)
   t.deepEqual(copied, original)
 })
-test('special objects 2', t => {
+test('special objects 2', () => {
   const original = {}
   const copied = copy(original)
   t.deepEqual(copied, original)
 })
 
-test('symbols as keys', t => {
+test('symbols as keys', () => {
   const mySymbol = Symbol('mySymbol')
   const original = { value: 42, [mySymbol]: 'hello' }
   const copied = copy(original)
@@ -131,14 +131,14 @@ test('symbols as keys', t => {
   original.value = 1
   // @ts-ignore
   original[mySymbol] = 2
-  t.is(copied.value, 42)
-  t.is(copied[mySymbol], 'hello')
-  t.is(original.value, 1)
+  expect(copied.value).toEqual(42)
+  expect(copied[mySymbol]).toEqual('hello')
+  expect(original.value).toEqual(1)
   // @ts-ignore
-  t.is(original[mySymbol], 2)
+  expect(original[mySymbol]).toEqual(2)
 })
 
-test('nonenumerable keys - turned on', t => {
+test('nonenumerable keys - turned on', () => {
   const mySymbol = Symbol('mySymbol')
   const original = { value: 42 }
   Object.defineProperty(original, 'id', {
@@ -159,20 +159,20 @@ test('nonenumerable keys - turned on', t => {
   original.id = 100
   original[mySymbol] = 'new'
   original.value = 300
-  t.is(copied.value, 42)
+  expect(copied.value).toEqual(42)
   // @ts-ignore
-  t.is(copied.id, 1)
-  t.is(copied[mySymbol], 'original')
-  t.is(Object.keys(copied).length, 1)
+  expect(copied.id).toEqual(1)
+  expect(copied[mySymbol]).toEqual('original')
+  expect(Object.keys(copied).length).toEqual(1)
   t.true(Object.keys(copied).includes('value'))
   // @ts-ignore
-  t.is(original.id, 100)
-  t.is(original[mySymbol], 'new')
-  t.is(original.value, 300)
-  t.is(Object.keys(original).length, 1)
+  expect(original.id).toEqual(100)
+  expect(original[mySymbol]).toEqual('new')
+  expect(original.value).toEqual(300)
+  expect(Object.keys(original).length).toEqual(1)
 })
 
-test('nonenumerable keys - turned off', t => {
+test('nonenumerable keys - turned off', () => {
   const mySymbol = Symbol('mySymbol')
   const original = { value: 42 }
   Object.defineProperty(original, 'id', {
@@ -189,13 +189,13 @@ test('nonenumerable keys - turned off', t => {
   })
   const copied = copy(original)
   // change original
-  t.is(copied.value, 42)
+  expect(copied.value).toEqual(42)
   // @ts-ignore
-  t.is(copied.id, undefined)
-  t.is(copied[mySymbol], undefined)
+  expect(copied.id).toEqual(undefined)
+  expect(copied[mySymbol]).toEqual(undefined)
 })
 
-test('specific props', t => {
+test('specific props', () => {
   const mySymbol = Symbol('mySymbol')
   const mySymbol2 = Symbol('mySymbol')
   const original = { value: 42, value2: 24 }
@@ -225,29 +225,29 @@ test('specific props', t => {
   })
   // only enumerable
   const copied = copy(original, { props: [mySymbol, 'value', 'id'] })
-  t.is(copied.value, 42)
+  expect(copied.value).toEqual(42)
   // @ts-ignore
-  t.is(copied.id, undefined)
-  t.is(copied[mySymbol], undefined)
-  t.is(copied.value2, undefined)
+  expect(copied.id).toEqual(undefined)
+  expect(copied[mySymbol]).toEqual(undefined)
+  expect(copied.value2).toEqual(undefined)
   // @ts-ignore
-  t.is(copied.id2, undefined)
-  t.is(copied[mySymbol2], undefined)
-  t.is(Object.keys(copied).length, 1)
+  expect(copied.id2).toEqual(undefined)
+  expect(copied[mySymbol2]).toEqual(undefined)
+  expect(Object.keys(copied).length).toEqual(1)
   t.true(Object.keys(copied).includes('value'))
-  t.is(Object.keys(original).length, 2)
+  expect(Object.keys(original).length).toEqual(2)
 
   // non-enumerable included
   const copied2 = copy(original, { props: [mySymbol, 'value', 'id'], nonenumerable: true })
-  t.is(copied2.value, 42)
+  expect(copied2.value).toEqual(42)
   // @ts-ignore
-  t.is(copied2.id, 1)
-  t.is(copied2[mySymbol], 'original')
-  t.is(copied2.value2, undefined)
+  expect(copied2.id).toEqual(1)
+  expect(copied2[mySymbol]).toEqual('original')
+  expect(copied2.value2).toEqual(undefined)
   // @ts-ignore
-  t.is(copied2.id2, undefined)
-  t.is(copied2[mySymbol2], undefined)
-  t.is(Object.keys(copied2).length, 1)
+  expect(copied2.id2).toEqual(undefined)
+  expect(copied2[mySymbol2]).toEqual(undefined)
+  expect(Object.keys(copied2).length).toEqual(1)
   t.true(Object.keys(copied2).includes('value'))
-  t.is(Object.keys(original).length, 2)
+  expect(Object.keys(original).length).toEqual(2)
 })
