@@ -7,7 +7,7 @@ function assignProp (
   key: string | symbol,
   newVal: any,
   originalObject: PlainObject,
-  includeNonenumerable: boolean
+  includeNonenumerable?: boolean
 ): void {
   const propType = {}.propertyIsEnumerable.call(originalObject, key)
     ? 'enumerable'
@@ -35,16 +35,21 @@ export type Options = { props?: (string | symbol)[]; nonenumerable?: boolean }
  * @returns {T} the target with replaced values
  * @export
  */
-export function copy<T extends any> (target: T, options: Options = {}): T {
-  if (isArray(target)) return target.map((item) => copy(item, options)) as T
-  if (!isPlainObject(target)) return target
+export function copy<T> (target: T, options: Options = {}): T {
+  if (isArray(target)) {
+    return target.map((item) => copy(item, options)) as any
+  }
+
+  if (!isPlainObject(target)) { return target }
+
   const props = Object.getOwnPropertyNames(target)
   const symbols = Object.getOwnPropertySymbols(target)
-  return [...props, ...symbols].reduce((carry, key) => {
+  
+  return [...props, ...symbols].reduce<any>((carry, key) => {
     if (isArray(options.props) && !options.props.includes(key)) {
       return carry
     }
-    const val = target[key]
+    const val = (target as any)[key]
     const newVal = copy(val, options)
     assignProp(carry, key, newVal, target, options.nonenumerable)
     return carry
