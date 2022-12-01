@@ -18,12 +18,9 @@ function assignProp(carry, key, newVal, originalObject, includeNonenumerable) {
 /**
  * Copy (clone) an object and all its props recursively to get rid of any prop referenced of the original object. Arrays are also cloned, however objects inside arrays are still linked.
  *
- * @export
- * @template T
- * @param {T} target Target can be anything
- * @param {Options} [options = {}] Options can be `props` or `nonenumerable`
- * @returns {T} the target with replaced values
- * @export
+ * @param target Target can be anything
+ * @param [options = {}] Options can be `props` or `nonenumerable`
+ * @returns the target with replaced values
  */
 function copy(target, options = {}) {
     if (isArray(target)) {
