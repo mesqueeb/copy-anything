@@ -2,7 +2,7 @@
   "name": "copy-anything",
   "sideEffects": false,
   "type": "module",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "description": "An optimised way to copy'ing an object. A small and simple integration",
   "module": "./dist/index.es.js",
   "main": "./dist/index.cjs",
