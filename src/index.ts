@@ -1,4 +1,4 @@
-import { isPlainObject, isArray } from 'is-what'
+import { isArray, isPlainObject } from 'is-what'
 
 type PlainObject = { [key in string | number | symbol]: unknown }
 
@@ -7,7 +7,7 @@ function assignProp(
   key: string | symbol,
   newVal: any,
   originalObject: PlainObject,
-  includeNonenumerable?: boolean
+  includeNonenumerable?: boolean,
 ): void {
   const propType = {}.propertyIsEnumerable.call(originalObject, key)
     ? 'enumerable'

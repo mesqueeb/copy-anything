@@ -1,5 +1,5 @@
-import { test, expect } from 'vitest'
-import { copy } from '../src/index'
+import { expect, test } from 'vitest'
+import { copy } from '../src/index.js'
 
 test('copy - change original', () => {
   const original: any = { a: 0, b: 0, c: { d: 0 } }
