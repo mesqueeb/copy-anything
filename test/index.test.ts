@@ -2,7 +2,11 @@ import { expect, test } from 'vitest'
 import { copy } from '../src/index.js'
 
 test('copy - change original', () => {
-  const original: any = { a: 0, b: 0, c: { d: 0 } }
+  const original: { a: number; b: number; c: { d: number; e?: string } } = {
+    a: 0,
+    b: 0,
+    c: { d: 0 },
+  }
   const copied = copy(original)
   expect(copied).toEqual(original)
   // change original
@@ -16,8 +20,13 @@ test('copy - change original', () => {
   expect(original.c.e).toEqual('new')
   expect(copied.c.e).toEqual(undefined)
 })
+
 test('copy - change copied', () => {
-  const original: any = { a: false, b: '', c: { d: false } }
+  const original: { a: boolean; b: string; c: { d: boolean; e?: string } } = {
+    a: false,
+    b: '',
+    c: { d: false },
+  }
   const copied = copy(original)
   // change copied
   copied.a = true
@@ -43,6 +52,7 @@ test('Arrays in objects - change original', () => {
   expect(original.c.d).toEqual(['z', 'a'])
   expect(copied.c.d).toEqual(['a'])
 })
+
 test('Arrays in objects - change copied', () => {
   const original = { a: [1, 2], c: { d: ['a'] } }
   const copied = copy(original)
@@ -68,6 +78,7 @@ test('Arrays with objects in objects - change original', () => {
   expect(original.c.d).toEqual([{ b: 2 }])
   expect(copied.c.d).toEqual([{ b: 1 }])
 })
+
 test('Arrays with objects in objects - change copied', () => {
   const original = { a: [{ a: 1 }], c: { d: [{ b: 1 }] } }
   const copied = copy(original)
@@ -95,11 +106,13 @@ test('non objects 1', () => {
   const copied = copy(original)
   expect(copied).toEqual(original)
 })
+
 test('non objects 2', () => {
   const original = 1
   const copied = copy(original)
   expect(copied).toEqual(original)
 })
+
 test('non objects 3', () => {
   const original = undefined
   const copied = copy(original)
@@ -111,6 +124,7 @@ test('special objects 1', () => {
   const copied = copy(original)
   expect(copied).toEqual(original)
 })
+
 test('special objects 2', () => {
   const original = {}
   const copied = copy(original)
@@ -119,7 +133,7 @@ test('special objects 2', () => {
 
 test('symbols as keys', () => {
   const mySymbol = Symbol('mySymbol')
-  const original: any = { value: 42, [mySymbol]: 'hello' }
+  const original: { [key in string | symbol]: number | string } = { value: 42, [mySymbol]: 'hello' }
   const copied = copy(original)
   // change original
   original.value = 1
@@ -132,7 +146,7 @@ test('symbols as keys', () => {
 
 test('nonenumerable keys - turned on', () => {
   const mySymbol = Symbol('mySymbol')
-  const original: any = { value: 42 }
+  const original: { [key in string | symbol]: number | string } = { value: 42 }
   Object.defineProperty(original, 'id', {
     value: 1,
     writable: true,
@@ -163,7 +177,7 @@ test('nonenumerable keys - turned on', () => {
 
 test('nonenumerable keys - turned off', () => {
   const mySymbol = Symbol('mySymbol')
-  const original = { value: 42 }
+  const original: { [key in string | symbol]: number } = { value: 42 }
   Object.defineProperty(original, 'id', {
     value: 1,
     writable: true,
@@ -176,7 +190,7 @@ test('nonenumerable keys - turned off', () => {
     enumerable: false,
     configurable: true,
   })
-  const copied: any = copy(original)
+  const copied = copy(original)
   // change original
   expect(copied.value).toEqual(42)
   expect(copied.id).toEqual(undefined)
@@ -186,7 +200,7 @@ test('nonenumerable keys - turned off', () => {
 test('specific props', () => {
   const mySymbol = Symbol('mySymbol')
   const mySymbol2 = Symbol('mySymbol')
-  const original = { value: 42, value2: 24 }
+  const original: { [key: symbol | string]: number } = { value: 42, value2: 24 }
   Object.defineProperty(original, 'id', {
     value: 1,
     writable: true,
@@ -212,7 +226,7 @@ test('specific props', () => {
     configurable: true,
   })
   // only enumerable
-  const copied: any = copy(original, { props: [mySymbol, 'value', 'id'] })
+  const copied = copy(original, { props: [mySymbol, 'value', 'id'] })
   expect(copied.value).toEqual(42)
   expect(copied.id).toEqual(undefined)
   expect(copied[mySymbol]).toEqual(undefined)
@@ -224,7 +238,7 @@ test('specific props', () => {
   expect(Object.keys(original).length).toEqual(2)
 
   // non-enumerable included
-  const copied2: any = copy(original, { props: [mySymbol, 'value', 'id'], nonenumerable: true })
+  const copied2 = copy(original, { props: [mySymbol, 'value', 'id'], nonenumerable: true })
   expect(copied2.value).toEqual(42)
   expect(copied2.id).toEqual(1)
   expect(copied2[mySymbol]).toEqual('original')

@@ -23,19 +23,25 @@ function assignProp(
   }
 }
 
-export type Options = { props?: (string | symbol)[]; nonenumerable?: boolean }
+export type Options<T> = { props?: (keyof T)[]; nonenumerable?: boolean }
 
 /**
  * Copy (clone) an object and all its props recursively to get rid of any prop referenced of the
  * original object. Arrays are also cloned, however objects inside arrays are still linked.
  *
  * @param target Target can be anything
- * @param [options={}] Options can be `props` or `nonenumerable`. Default is `{}`
+ * @param [options={}] See type {@link Options} for more details.
+ *
+ *   - `{ props: ['key1'] }` will only copy the `key1` property. When using this you will need to cast
+ *       the return type manually (in order to keep the TS implementation in here simple I didn't
+ *       built a complex auto resolved type for those few cases people want to use this option)
+ *   - `{ nonenumerable: true }` will copy all non-enumerable properties. Default is `{}`
+ *
  * @returns The target with replaced values
  */
-export function copy<T>(target: T, options: Options = {}): T {
+export function copy<T>(target: T, options: Options<T> = {}): T {
   if (isArray(target)) {
-    return target.map((item) => copy(item, options)) as any
+    return target.map((item) => copy(item as any, options)) as any
   }
 
   if (!isPlainObject(target)) {
@@ -48,7 +54,7 @@ export function copy<T>(target: T, options: Options = {}): T {
   return [...props, ...symbols].reduce<any>((carry, key) => {
     // Skip __proto__ properties to prevent prototype pollution
     if (key === '__proto__') return carry
-    if (isArray(options.props) && !options.props.includes(key)) {
+    if (isArray(options.props) && !options.props.includes(key as any)) {
       return carry
     }
     const val = (target as any)[key]

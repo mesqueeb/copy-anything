@@ -23,9 +23,10 @@ I was looking for:
 - can copy non-enumerable props as well
 - **does not break special class instances**　‼️
 
-This last one is crucial! So many libraries use custom classes that create objects with special prototypes, and such objects all break when trying to copy them inproperly. So we gotta be careful!
+This last one is crucial! So many libraries use custom classes that create objects with special prototypes, and such objects all break when trying to copy them improperly. So we gotta be careful!
 
 copy-anything will copy objects and nested properties, but only as long as they're "plain objects". As soon as a sub-prop is not a "plain object" and has a special prototype, it will copy that instance over "as is". ♻️
+
 ## Meet the family (more tiny utils with TS support)
 
 - [is-what 🙉](https://github.com/mesqueeb/is-what)
@@ -114,6 +115,7 @@ const copy = copy(original, { props: ['name'] })
 > Please note, if the props you have specified are non-enumerable, you will also need to pass `{nonenumerable: true}`.
 
 <!-- prettier-ignore-end -->
+
 ## Source code
 
 The source code is literally just these lines. Most of the magic comes from the isPlainObject function from the [is-what library](https://github.com/mesqueeb/is-what).
