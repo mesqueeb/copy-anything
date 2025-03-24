@@ -235,3 +235,20 @@ test('specific props', () => {
   expect(Object.keys(copied2).includes('value')).toEqual(true)
   expect(Object.keys(original).length).toEqual(2)
 })
+
+test('prototype pollution prevention', () => {
+  const maliciousPayload = JSON.parse('{"__proto__": {"polluted": true}}')
+  const original = { a: 1 }
+
+  // Attempt prototype pollution
+  const copied = copy(maliciousPayload)
+
+  // Verify the prototype wasn't polluted
+  expect((Object.prototype as any).polluted).toBeUndefined()
+  expect((copied as any).__proto__).toBe(Object.prototype)
+
+  // Verify the original object wasn't affected
+  const originalCopy = copy(original)
+  expect((originalCopy as any).__proto__).toBe(Object.prototype)
+  expect((originalCopy as any).polluted).toBeUndefined()
+})

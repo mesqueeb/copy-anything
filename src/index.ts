@@ -26,11 +26,12 @@ function assignProp(
 export type Options = { props?: (string | symbol)[]; nonenumerable?: boolean }
 
 /**
- * Copy (clone) an object and all its props recursively to get rid of any prop referenced of the original object. Arrays are also cloned, however objects inside arrays are still linked.
+ * Copy (clone) an object and all its props recursively to get rid of any prop referenced of the
+ * original object. Arrays are also cloned, however objects inside arrays are still linked.
  *
  * @param target Target can be anything
- * @param [options = {}] Options can be `props` or `nonenumerable`
- * @returns the target with replaced values
+ * @param [options={}] Options can be `props` or `nonenumerable`. Default is `{}`
+ * @returns The target with replaced values
  */
 export function copy<T>(target: T, options: Options = {}): T {
   if (isArray(target)) {
@@ -45,6 +46,8 @@ export function copy<T>(target: T, options: Options = {}): T {
   const symbols = Object.getOwnPropertySymbols(target)
 
   return [...props, ...symbols].reduce<any>((carry, key) => {
+    // Skip __proto__ properties to prevent prototype pollution
+    if (key === '__proto__') return carry
     if (isArray(options.props) && !options.props.includes(key)) {
       return carry
     }
