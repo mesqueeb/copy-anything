@@ -15,11 +15,12 @@ function assignProp(carry, key, newVal, originalObject, includeNonenumerable) {
     }
 }
 /**
- * Copy (clone) an object and all its props recursively to get rid of any prop referenced of the original object. Arrays are also cloned, however objects inside arrays are still linked.
+ * Copy (clone) an object and all its props recursively to get rid of any prop referenced of the
+ * original object. Arrays are also cloned, however objects inside arrays are still linked.
  *
  * @param target Target can be anything
- * @param [options = {}] Options can be `props` or `nonenumerable`
- * @returns the target with replaced values
+ * @param [options={}] Options can be `props` or `nonenumerable`. Default is `{}`
+ * @returns The target with replaced values
  */
 export function copy(target, options = {}) {
     if (isArray(target)) {
@@ -31,6 +32,9 @@ export function copy(target, options = {}) {
     const props = Object.getOwnPropertyNames(target);
     const symbols = Object.getOwnPropertySymbols(target);
     return [...props, ...symbols].reduce((carry, key) => {
+        // Skip __proto__ properties to prevent prototype pollution
+        if (key === '__proto__')
+            return carry;
         if (isArray(options.props) && !options.props.includes(key)) {
             return carry;
         }
