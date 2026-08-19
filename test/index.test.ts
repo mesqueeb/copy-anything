@@ -123,6 +123,8 @@ test('special objects 1', () => {
   const original = new Date()
   const copied = copy(original)
   expect(copied).toEqual(original)
+  // toEqual compares dates by value, so assert it is the very same instance and was not cloned
+  expect(copied).toBe(original)
 })
 
 test('special objects 2', () => {
@@ -265,4 +267,98 @@ test('prototype pollution prevention', () => {
   const originalCopy = copy(original)
   expect((originalCopy as any).__proto__).toBe(Object.prototype)
   expect((originalCopy as any).polluted).toBeUndefined()
+})
+
+/** Red test: `copy` recurses per nesting level, so deep input exhausts the JS call stack. */
+test('deeply nested objects do not exhaust the call stack', () => {
+  const depth = 10_000
+  let original: any = { value: 'leaf' }
+  for (let i = 0; i < depth; i++) original = { nested: original }
+
+  const copied = copy(original)
+
+  let node = copied
+  for (let i = 0; i < depth; i++) node = node.nested
+  expect(node.value).toEqual('leaf')
+})
+
+test('circular references are reproduced, not followed forever', () => {
+  const original: any = { name: 'root' }
+  original.self = original
+  original.child = { parent: original }
+
+  const copied = copy(original)
+
+  expect(copied).not.toBe(original)
+  expect(copied.self).toBe(copied)
+  expect(copied.child.parent).toBe(copied)
+  original.name = 'changed'
+  expect(copied.name).toEqual('root')
+})
+
+test('two props pointing at one object share one copy', () => {
+  const shared = { v: 1 }
+  const copied = copy({ a: shared, b: shared })
+
+  expect(copied.a).toBe(copied.b)
+  expect(copied.a).not.toBe(shared)
+  copied.a.v = 2
+  expect(shared.v).toEqual(1)
+})
+
+test('array holes and length are preserved', () => {
+  const original = [1, , 3] as (number | undefined)[]
+  original.length = 5
+
+  const copied = copy(original)
+
+  expect(copied.length).toEqual(5)
+  expect(1 in copied).toEqual(false)
+  expect(copied[0]).toEqual(1)
+  expect(copied[2]).toEqual(3)
+})
+
+test('prototype pollution prevention with nonenumerable option', () => {
+  const maliciousPayload = JSON.parse('{"a": 1, "__proto__": {"polluted": true}}')
+
+  const copied = copy(maliciousPayload, { nonenumerable: true })
+
+  expect((Object.prototype as any).polluted).toBeUndefined()
+  expect((copied as any).polluted).toBeUndefined()
+  expect(Object.getPrototypeOf(copied)).toBe(Object.prototype)
+  expect(copied.a).toEqual(1)
+})
+
+test('inherited enumerable props are not copied as own props', () => {
+  ;(Object.prototype as any).inheritedByEveryone = 'leak'
+  try {
+    const copied = copy({ a: 1 })
+
+    expect(Object.keys(copied)).toEqual(['a'])
+    expect(Object.prototype.hasOwnProperty.call(copied, 'inheritedByEveryone')).toEqual(false)
+  } finally {
+    delete (Object.prototype as any).inheritedByEveryone
+  }
+})
+
+test('special class instances are copied over as is', () => {
+  class Pokemon {
+    name: string
+    constructor(name: string) {
+      this.name = name
+    }
+  }
+  const instance = new Pokemon('Ditto')
+  const nullProto = Object.create(null)
+  nullProto.a = 1
+  const original = { instance, nullProto, nested: { instance } }
+
+  const copied = copy(original)
+
+  expect(copied.instance).toBe(instance)
+  expect(copied.nested.instance).toBe(instance)
+  expect(copied.nullProto).toBe(nullProto)
+  // the plain wrapper around them is still a real copy
+  expect(copied).not.toBe(original)
+  expect(copied.nested).not.toBe(original.nested)
 })

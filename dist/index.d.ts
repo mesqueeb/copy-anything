@@ -4,7 +4,11 @@ export type Options<T> = {
 };
 /**
  * Copy (clone) an object and all its props recursively to get rid of any prop referenced of the
- * original object. Arrays are also cloned, however objects inside arrays are still linked.
+ * original object. Arrays and the objects inside them are cloned as well.
+ *
+ * Nesting depth is limited only by available memory, and circular references are reproduced in the
+ * copy rather than followed forever. Two props pointing at the same object still point at one
+ * shared copy afterwards.
  *
  * @param target Target can be anything
  * @param [options={}] See type {@link Options} for more details.
