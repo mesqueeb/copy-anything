@@ -12,10 +12,10 @@
   },
   "scripts": {
     "test": "vitest run",
-    "benchmark": "npm run build && node --max-old-space-size=1024 benchmark/index.mjs",
+    "benchmark": "pnpm run build && node --max-old-space-size=1024 benchmark/index.mjs",
     "lint": "tsc --noEmit && eslint ./src",
     "build": "del-cli dist && tsc",
-    "release": "npm run lint && npm run build && np"
+    "release": "pnpm run lint && pnpm run build && np"
   },
   "devDependencies": {
     "@cycraft/eslint": "^0.4.4",
@@ -24,8 +24,8 @@
     "del-cli": "^7.0.0",
     "klona": "^2.0.6",
     "lodash.clonedeep": "^4.5.0",
-    "np": "^12.0.1",
-    "vitest": "^4.1.11"
+    "np": "^12.1.1",
+    "vitest": "^5.0.1"
   },
   "files": [
     "dist"
@@ -53,5 +53,5 @@
   },
   "homepage": "https://github.com/mesqueeb/copy-anything#readme",
   "bugs": "https://github.com/mesqueeb/copy-anything/issues",
-  "packageManager": "npm@12.0.2"
+  "packageManager": "pnpm@11.27.0"
 }
