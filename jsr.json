@@ -1,0 +1,12 @@
+{
+  "name": "@mesqueeb/copy-anything",
+  "version": "4.1.2",
+  "exports": "./src/index.ts",
+  "publish": {
+    "include": [
+      "src/**",
+      "README.md",
+      "LICENSE"
+    ]
+  }
+}
