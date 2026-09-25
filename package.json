@@ -4,6 +4,7 @@
   "description": "An optimised way to copy'ing an object. A small and simple integration",
   "type": "module",
   "sideEffects": false,
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": "./dist/index.js"
   },
