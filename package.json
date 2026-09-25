@@ -23,8 +23,10 @@
     "@vitest/coverage-v8": "^4.1.11",
     "bumpp": "^12.3.0",
     "del-cli": "^7.0.0",
+    "eslint": "^9.20.1",
     "klona": "^2.0.6",
     "lodash.clonedeep": "^4.5.0",
+    "typescript": "^5.9.3",
     "vitest": "^5.0.2"
   },
   "files": [
