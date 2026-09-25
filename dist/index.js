@@ -1,6 +1,7 @@
 /**
- * Assigns a prop the copy is keeping, preserving whether it was enumerable. Callers decide *whether*
- * to keep a non-enumerable prop before getting here, so by this point the answer is always yes.
+ * Assigns a prop the copy is keeping, preserving whether it was enumerable. Callers decide
+ * _whether_ to keep a non-enumerable prop before getting here, so by this point the answer is
+ * always yes.
  */
 function assignProp(carry, key, newVal, originalObject) {
     if (Object.prototype.propertyIsEnumerable.call(originalObject, key)) {
