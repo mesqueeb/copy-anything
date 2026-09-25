@@ -4,7 +4,7 @@ import { copy } from '../src/index.js'
 /**
  * Asserts the structuredClone column of the README's comparison table. structuredClone is the
  * platform's own deep clone, which makes it the most interesting comparison: it recurses, so it
- * runs out of call stack at a *lower* depth than copy-anything does.
+ * runs out of call stack at a _lower_ depth than copy-anything does.
  */
 
 test('README: unlimited nesting depth', () => {

@@ -10,8 +10,8 @@ import os from 'node:os'
 import { copy } from '../dist/index.js'
 
 /**
- * The published 4.0.5 implementation, pasted verbatim together with the two is-what 5.5.0 helpers it
- * called, so "how much faster is 4.1.0" stays reproducible now that is-what is no longer a
+ * The published 4.0.5 implementation, pasted verbatim together with the two is-what 5.5.0 helpers
+ * it called, so "how much faster is 4.1.0" stays reproducible now that is-what is no longer a
  * dependency. Recursive by design — that is the point of comparing against it.
  */
 const legacy = (() => {
@@ -65,8 +65,8 @@ const contenders = [
 ]
 
 /**
- * `name` is the column header, kept short enough to keep the table readable. `about` is printed as a
- * legend under the table, so the precise shape lives next to the numbers instead of in a header
+ * `name` is the column header, kept short enough to keep the table readable. `about` is printed as
+ * a legend under the table, so the precise shape lives next to the numbers instead of in a header
  * nobody can fit it into.
  */
 const fixtures = [
@@ -140,7 +140,8 @@ const results = contenders.map(({ name, fn }) => ({
   }),
 }))
 
-const format = (ns) => (ns === null ? 'throws' : ns < 10_000 ? `${Math.round(ns)}ns` : `${(ns / 1000).toFixed(1)}µs`)
+const format = (ns) =>
+  ns === null ? 'throws' : ns < 10_000 ? `${Math.round(ns)}ns` : `${(ns / 1000).toFixed(1)}µs`
 
 console.log('## Benchmark\n')
 console.log(`| clone function | ${fixtures.map((f) => f.name).join(' | ')} |`)
@@ -187,7 +188,13 @@ const capabilities = [
       return c.x === c.y && c.x !== shared
     },
   },
-  { name: 'symbol keys', test: (f) => { const s = Symbol('s'); return f({ [s]: 'v' })[s] === 'v' } },
+  {
+    name: 'symbol keys',
+    test: (f) => {
+      const s = Symbol('s')
+      return f({ [s]: 'v' })[s] === 'v'
+    },
+  },
   {
     name: 'non-enumerable props',
     test: (f) => {
