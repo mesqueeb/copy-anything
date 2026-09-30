@@ -28,7 +28,7 @@
     "klona": "^2.0.6",
     "lodash.clonedeep": "^4.5.0",
     "typescript": "^5.9.3",
-    "vitest": "^5.0.2"
+    "vitest": "^5.0.3"
   },
   "files": [
     "dist"
@@ -56,5 +56,5 @@
   },
   "homepage": "https://github.com/mesqueeb/copy-anything#readme",
   "bugs": "https://github.com/mesqueeb/copy-anything/issues",
-  "packageManager": "pnpm@11.28.0"
+  "packageManager": "pnpm@11.28.3"
 }
